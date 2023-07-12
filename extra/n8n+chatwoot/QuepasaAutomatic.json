@@ -4,7 +4,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "=INSERT INTO \"contacts\" (\"name\", \"identifier\", \"account_id\", \"created_at\", \"updated_at\", \"last_activity_at\") VALUES ('Quepasa Control', 'control@quepasa.io', {{ $json.account }}, NOW(), NOW(), NOW());",
+        "query": "=INSERT INTO \"contacts\" (\"name\", \"identifier\", \"account_id\", \"created_at\", \"updated_at\", \"last_activity_at\") VALUES ('{{ $env["C8Q_QP_BOTTITLE"] }}', '{{ $env["C8Q_QP_CONTACT"] }}', {{ $json.account }}, NOW(), NOW(), NOW());",
         "additionalFields": {}
       },
       "id": "9ae73ae2-b057-42ab-aec2-2eb07432b666",
@@ -27,7 +27,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "=INSERT INTO \"automation_rules\" (\"account_id\", \"name\", \"description\", \"event_name\", \"conditions\", \"actions\", \"created_at\", \"updated_at\", \"active\") VALUES ({{ $json.account }}, 'Start Quepasa', 'Start Quepasa', 'message_created', \n\n'[{\"values\": [\"control@quepasa.io\"], \"attribute_key\": \"identifier\", \"query_operator\": \"and\", \"filter_operator\": \"equal_to\", \"custom_attribute_type\": \"\"}, {\"values\": [\"outgoing\"], \"attribute_key\": \"message_type\", \"query_operator\": \"and\", \"filter_operator\": \"equal_to\", \"custom_attribute_type\": \"\"}, {\"values\": [\"/qrcode\"], \"attribute_key\": \"content\", \"filter_operator\": \"contains\", \"custom_attribute_type\": \"\"}]'\n\n, '[{\"action_name\": \"send_webhook_event\", \"action_params\": [\"{{ $node[\"Colocar Dados\"].json[\"URL N8N\"] }}/webhook/quepasa\"]}]', NOW(), NOW(), 'true');",
+        "query": "=INSERT INTO \"automation_rules\" (\"account_id\", \"name\", \"description\", \"event_name\", \"conditions\", \"actions\", \"created_at\", \"updated_at\", \"active\") VALUES ({{ $json.account }}, '{{ $env["C8Q_QP_BOTTITLE"] }}', '{{ $env["C8Q_QP_BOTTITLE"] }}', 'message_created', \n\n'[{\"values\": [\"{{ $env["C8Q_QP_CONTACT"] }}\"], \"attribute_key\": \"identifier\", \"query_operator\": \"and\", \"filter_operator\": \"equal_to\", \"custom_attribute_type\": \"\"}, {\"values\": [\"outgoing\"], \"attribute_key\": \"message_type\", \"query_operator\": \"and\", \"filter_operator\": \"equal_to\", \"custom_attribute_type\": \"\"}, {\"values\": [\"/qrcode\"], \"attribute_key\": \"content\", \"filter_operator\": \"contains\", \"custom_attribute_type\": \"\"}]'\n\n, '[{\"action_name\": \"send_webhook_event\", \"action_params\": [\"{{ $node[\"Colocar Dados\"].json[\"URL N8N\"] }}/webhook/quepasa\"]}]', NOW(), NOW(), 'true');",
         "additionalFields": {}
       },
       "id": "e1822cbf-efbc-47dd-8ad7-afa92d4c3b85",
@@ -51,7 +51,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "=SELECT \"accounts\".\"id\" AS \"account\" FROM \"accounts\" LEFT JOIN \"automation_rules\" ON \"accounts\".\"id\" = \"automation_rules\".\"account_id\" AND \"automation_rules\".\"name\" = 'Start Quepasa' WHERE \"automation_rules\".\"name\" IS NULL;",
+        "query": "=SELECT \"accounts\".\"id\" AS \"account\" FROM \"accounts\" LEFT JOIN \"automation_rules\" ON \"accounts\".\"id\" = \"automation_rules\".\"account_id\" AND \"automation_rules\".\"name\" = '{{ $env["C8Q_QP_BOTTITLE"] }}' WHERE \"automation_rules\".\"name\" IS NULL;",
         "additionalFields": {}
       },
       "id": "2a75e8f4-7539-4d0a-88e2-561d0deabac7",
@@ -74,7 +74,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "=SELECT \"accounts\".\"id\" AS \"account\" FROM \"accounts\" LEFT JOIN \"contacts\" ON \"accounts\".\"id\" = \"contacts\".\"account_id\" AND \"contacts\".\"identifier\" = 'control@quepasa.io' WHERE \"contacts\".\"identifier\" IS NULL;",
+        "query": "=SELECT \"accounts\".\"id\" AS \"account\" FROM \"accounts\" LEFT JOIN \"contacts\" ON \"accounts\".\"id\" = \"contacts\".\"account_id\" AND \"contacts\".\"identifier\" = '{{ $env["C8Q_QP_CONTACT"] }}' WHERE \"contacts\".\"identifier\" IS NULL;",
         "additionalFields": {}
       },
       "id": "fb3f0031-6bca-4ef2-b154-3c02bb575e84",
